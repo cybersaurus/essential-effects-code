@@ -1,15 +1,17 @@
 package com.innerproduct.ee.effects
 
-import scala.annotation.nowarn
-import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.duration._
 
 object Timing extends App {
-  @nowarn
   val clock: MyIO[Long] =
-    ??? // <1>
+    MyIO(() => System.currentTimeMillis())
 
   def time[A](action: MyIO[A]): MyIO[(FiniteDuration, A)] =
-    ??? // <2>
+    for {
+      start <- clock
+      result <- action
+      end <- clock
+    } yield ((end-start).millis, result)
 
   val timedHello = Timing.time(Printing.hello)
 
