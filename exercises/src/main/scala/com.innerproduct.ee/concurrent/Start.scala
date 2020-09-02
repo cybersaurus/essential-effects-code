@@ -1,7 +1,9 @@
 package com.innerproduct.ee.concurrent
 
 import cats.effect._
+import cats.implicits._
 import scala.annotation.nowarn
+import com.innerproduct.ee.debug._
 
 object Start extends IOApp {
   
@@ -9,10 +11,9 @@ object Start extends IOApp {
   def run(args: List[String]): IO[ExitCode] =
     for {
       fiber <- task.start // <1>
-      // <2>
+      _ <- IO("line 2").debug()
     } yield ExitCode.Success
 
-  @nowarn
   val task: IO[String] =
-    ??? // <2>
+    IO("hello world!").debug()
 }
